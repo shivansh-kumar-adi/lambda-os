@@ -1,0 +1,16 @@
+flowchart LR
+    va["48-bit virtual address<br/>9 + 9 + 9 + 9 + 12 bits"] --> chk{"Canonical?"}
+    chk -- "no" --> bad["Reject"]
+    chk -- "yes" --> cr3["CR3 holds PML4 physical address"]
+    cr3 --> l4["PML4 entry"]
+    l4 --> l3["PDPT entry"]
+    l3 --> l2["PD entry"]
+    l2 --> l1["PT entry"]
+    l1 --> pa["4 KiB physical frame + offset"]
+    l3 -. "large page flag" .-> big1["1 GiB page"]
+    l2 -. "large page flag" .-> big2["2 MiB page"]
+    hh["HHDM: physical memory visible<br/>at a fixed virtual offset"] -. "used to read table pages" .-> l4
+    perm["Effective permissions = combine<br/>present, write, user, NX across all levels"] -.-> pa
+
+    classDef rep fill:#eef4ff,stroke:#3b6fd4,color:#111
+    class va,chk,bad,cr3,l4,l3,l2,l1,pa,big1,big2,hh,perm rep

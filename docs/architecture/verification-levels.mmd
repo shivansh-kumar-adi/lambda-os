@@ -1,0 +1,11 @@
+flowchart LR
+    v1["1. Tables constructed in memory"] --> v2["2. Tables checked by software walker"]
+    v2 --> v3["3. CR3 switched to the new hierarchy"]
+    v3 --> v4["4. CPU reads and writes through mappings"]
+    v4 --> v5["5. Hardware NX fault observed"]
+    v5 --> v6["6. TLB invalidation proven on a live space"]
+
+    classDef done fill:#e8f6ec,stroke:#2f8f4e,color:#111
+    classDef todo fill:#fafafa,stroke:#888,stroke-dasharray:5 4,color:#444
+    class v1,v2 done
+    class v3,v4,v5,v6 todo

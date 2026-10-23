@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    participant FW as Firmware
+    participant LM as Limine bootloader
+    participant K as K1 kernel
+    participant S as Serial port
+    participant T as Test mode
+
+    FW->>LM: Start boot from ISO
+    LM->>LM: Load kernel ELF, build memory map, set up HHDM
+    LM->>K: Jump to kernel entry (Limine protocol)
+    K->>K: Switch to kernel-owned bootstrap stack
+    K->>S: Print banner
+    K->>K: Install IDT exception gates
+    K->>K: Install GDT, TSS, double-fault IST
+    K->>K: Parse memory map, init physical allocator
+    K->>K: Inspect page tables (read only)
+    K->>T: Run selected test mode
+    T->>S: Print result markers
+    K->>K: Halt
+    Note over FW,T: Order summarises the reported slices 0G to 0L.<br/>Exact call order is not published here.

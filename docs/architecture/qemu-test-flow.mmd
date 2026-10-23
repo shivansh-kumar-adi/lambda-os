@@ -1,0 +1,13 @@
+flowchart TB
+    b["make: build kernel ELF"] --> i["xorriso: build bootable ISO"]
+    i --> q["QEMU runs ISO with a time limit"]
+    q --> s["Serial output captured to a log"]
+    s --> m{"Expected markers<br/>present in the log?"}
+    m -- "yes" --> p["PASS"]
+    m -- "no" --> f["FAIL"]
+    q --> t{"Process ended by<br/>the time limit?"}
+    t -- "yes, kernel halted as designed" --> m
+    t -- "no, ended early or crashed" --> f
+
+    note1["A timeout alone is not a pass.<br/>The serial markers decide."]
+    m -.- note1

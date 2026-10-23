@@ -1,0 +1,28 @@
+flowchart TB
+    dev(["Developer / Reviewer"])
+
+    subgraph desk["Track 1 - Desktop and AI workspace (reported)"]
+        ui["Branded desktop UI<br/>dock, launcher, settings"]
+        ai["AI backend foundation"]
+        pol["Permission policies"]
+        aud["Bounded audit operations"]
+        ui --> ai --> pol --> aud
+    end
+
+    subgraph kern["Track 2 - K1 custom kernel (reported)"]
+        k1["Freestanding C11 x86-64 kernel<br/>boots under QEMU"]
+    end
+
+    host["Host OS or compatibility layer<br/>(undecided)"]
+    apps["Existing browsers and applications"]
+
+    dev --> ui
+    dev -. "builds, boots, tests" .-> k1
+    ui -. "proposed integration" .-> host
+    host -. "provides" .-> apps
+    k1 -. "NOT integrated with the desktop today" .- ui
+
+    classDef rep fill:#eef4ff,stroke:#3b6fd4,color:#111
+    classDef plan fill:#fafafa,stroke:#888,stroke-dasharray:5 4,color:#444
+    class ui,ai,pol,aud,k1 rep
+    class host,apps plan

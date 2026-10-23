@@ -1,0 +1,18 @@
+flowchart TB
+    a["Limine memory-map response"] --> b["Select usable regions"]
+    b --> c["Treat reserved, ACPI, framebuffer<br/>and similar ranges as off limits"]
+    c --> d["Exclude the kernel's own physical range"]
+    d --> e["Handle bootloader-reclaimable memory<br/>conservatively"]
+    e --> f["Align to page boundaries"]
+    f --> g["Normalize into ordered regions"]
+    g --> h{"Overlapping or<br/>malformed entries?"}
+    h -- "yes" --> rej["Reject the map<br/>(do not trust it)"]
+    h -- "no" --> meta["Build allocator metadata"]
+    meta --> alloc["alloc page"]
+    meta --> free["free page"]
+    alloc --> fail{"Out of memory?"}
+    fail -- "yes" --> err["Report failure, no guess"]
+    fail -- "no" --> ret["Return a page-aligned frame"]
+
+    classDef rep fill:#eef4ff,stroke:#3b6fd4,color:#111
+    class a,b,c,d,e,f,g,h,rej,meta,alloc,free,fail,err,ret rep

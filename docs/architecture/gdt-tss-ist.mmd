@@ -1,0 +1,19 @@
+flowchart LR
+    gdtr["GDTR register"] --> gdt
+    subgraph gdt["Kernel-owned GDT"]
+        g0["Null descriptor"]
+        g1["Kernel code segment"]
+        g2["Kernel data segment"]
+        g3["TSS descriptor"]
+    end
+    g3 --> tss
+    subgraph tss["Task State Segment"]
+        r0["Ring 0 stack pointer"]
+        i1["IST entry for double fault"]
+    end
+    i1 --> dfs["Dedicated double-fault stack<br/>(separate memory)"]
+    r0 --> ks["Kernel stack"]
+    idt["IDT double-fault gate"] -. "selects IST entry" .-> i1
+
+    classDef rep fill:#eef4ff,stroke:#3b6fd4,color:#111
+    class gdtr,g0,g1,g2,g3,r0,i1,dfs,ks,idt rep

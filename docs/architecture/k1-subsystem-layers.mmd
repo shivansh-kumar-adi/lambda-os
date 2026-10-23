@@ -1,0 +1,30 @@
+flowchart TB
+    subgraph L5["Experimental - not active"]
+        vm2["Owned page-table mapper<br/>map, validate, rollback, unmap"]
+    end
+    subgraph L4["Memory"]
+        pmm["Physical page allocator"]
+        vmi["Page-table inspector (read only)"]
+    end
+    subgraph L3["CPU structures"]
+        idt["IDT and exception frames"]
+        gdt["GDT, TSS, double-fault IST"]
+    end
+    subgraph L2["Early runtime"]
+        stack["Kernel-owned bootstrap stack"]
+        ser["Serial diagnostics"]
+    end
+    subgraph L1["Boot"]
+        lim["Limine protocol handoff"]
+        ld["Linker script and entry"]
+    end
+    subgraph L0["Platform"]
+        hw["x86-64 CPU under QEMU"]
+    end
+
+    L5 --> L4 --> L3 --> L2 --> L1 --> L0
+
+    classDef exp fill:#fafafa,stroke:#888,stroke-dasharray:5 4,color:#444
+    classDef rep fill:#eef4ff,stroke:#3b6fd4,color:#111
+    class vm2 exp
+    class pmm,vmi,idt,gdt,stack,ser,lim,ld,hw rep

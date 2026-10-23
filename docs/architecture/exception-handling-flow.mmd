@@ -1,0 +1,18 @@
+flowchart TB
+    ev["CPU raises exception<br/>e.g. divide error, invalid opcode"] --> gate["IDT gate selects handler stub"]
+    gate --> ec{"Does this vector<br/>push a hardware error code?"}
+    ec -- "yes" --> keep["Use the pushed error code"]
+    ec -- "no" --> dummy["Push a placeholder so frames match"]
+    keep --> save["Assembly stub saves general registers"]
+    dummy --> save
+    save --> align["Keep stack aligned for the C call"]
+    align --> frame["Build one normalized exception frame"]
+    frame --> c["C handler"]
+    c --> rep["Print vector, error code, instruction pointer<br/>over serial"]
+    rep --> halt["Controlled fatal halt"]
+
+    ev2["Double fault<br/>(kernel stack unusable)"] --> ist["CPU switches to dedicated IST stack<br/>from the TSS"]
+    ist --> gate
+
+    classDef rep fill:#eef4ff,stroke:#3b6fd4,color:#111
+    class ev,gate,ec,keep,dummy,save,align,frame,c,rep,halt,ev2,ist rep

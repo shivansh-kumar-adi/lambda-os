@@ -1,0 +1,21 @@
+flowchart LR
+    done["Done (reported):<br/>boot, exceptions, GDT/TSS/IST,<br/>physical allocator, VM inspect,<br/>owned mapper (inactive)"]
+    done --> act["Safe address-space activation"]
+    act --> nx["Prove hardware NX and TLB behavior"]
+    act --> heap["Kernel heap"]
+    heap --> irq["Interrupts and timers"]
+    irq --> sched["Scheduler"]
+    sched --> sys["System calls"]
+    sys --> user["Userspace"]
+    user --> fs["Storage and filesystem"]
+    user --> dev["Device support"]
+    dev --> gfx["Graphics"]
+    dev --> net["Networking"]
+    net --> app["Application integration"]
+    gfx --> app
+    fs --> app
+
+    classDef done fill:#e8f6ec,stroke:#2f8f4e,color:#111
+    classDef plan fill:#fafafa,stroke:#888,stroke-dasharray:5 4,color:#444
+    class done done
+    class act,nx,heap,irq,sched,sys,user,fs,dev,gfx,net,app plan

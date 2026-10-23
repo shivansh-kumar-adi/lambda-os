@@ -1,0 +1,43 @@
+flowchart TB
+    subgraph fe["Desktop frontend (reported)"]
+        d1["Desktop shell"]
+        d2["Dock"]
+        d3["Launcher"]
+        d4["Settings"]
+        d5["AI assistant surface"]
+    end
+
+    subgraph be["AI / backend services (reported foundation)"]
+        a1["Request handling"]
+        a2["Provider integration"]
+        a3["Tool layer"]
+    end
+
+    subgraph trust["Trust boundary"]
+        p1["Permission policy check"]
+        p2["Bounded operation limits"]
+        p3["Audit event record"]
+    end
+
+    sys["System interfaces<br/>(host-dependent, undecided)"]
+
+    d5 --> a1 --> a3
+    a1 --> a2
+    a3 --> p1 --> p2 --> sys
+    p1 --> p3
+    p2 --> p3
+
+    d1 --- d2
+    d1 --- d3
+    d1 --- d4
+    d1 --- d5
+
+    subgraph k1["K1 kernel - separate track"]
+        kk["Boots in QEMU<br/>no desktop on top yet"]
+    end
+    sys -. "possible future target, unproven" .-> kk
+
+    classDef rep fill:#eef4ff,stroke:#3b6fd4,color:#111
+    classDef plan fill:#fafafa,stroke:#888,stroke-dasharray:5 4,color:#444
+    class d1,d2,d3,d4,d5,a1,a2,a3,p1,p2,p3,kk rep
+    class sys plan

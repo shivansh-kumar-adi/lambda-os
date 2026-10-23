@@ -1,0 +1,26 @@
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant UI as Desktop UI
+    participant AI as AI backend
+    participant PP as Permission policy
+    participant OP as Bounded operation
+    participant AU as Audit record
+
+    U->>UI: Ask the assistant to do something
+    UI->>AI: Send request
+    AI->>AI: Decide which tool, if any, is needed
+    AI->>PP: Is this tool call allowed?
+    alt allowed
+        PP-->>AI: Allow
+        AI->>OP: Run with limits (time, scope)
+        OP-->>AI: Result or bounded failure
+        AI->>AU: Record the operation
+        AI-->>UI: Answer with result
+    else denied
+        PP-->>AI: Deny
+        AI->>AU: Record the denial
+        AI-->>UI: Explain that it was not permitted
+    end
+    UI-->>U: Show response
+    Note over PP,AU: Conceptual flow of the reported design.<br/>Exact interfaces are not published here.

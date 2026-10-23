@@ -1,0 +1,28 @@
+flowchart TB
+    goal(["Goal: distinctive desktop + AI workspace<br/>with existing browsers and apps"])
+
+    goal --> A
+    goal --> B
+    goal --> C
+
+    subgraph A["A. Linux-based LambdaOS"]
+        a1["Reuse Linux kernel, drivers,<br/>filesystems, networking"]
+        a2["Existing browsers and package ecosystems"]
+        a3["K1 dropped or kept only as a study"]
+    end
+    subgraph B["B. Hybrid (leading candidate)"]
+        b1["Usable desktop on a Linux base"]
+        b2["Custom desktop + AI integration layer"]
+        b3["K1 continues as separate experimental track"]
+    end
+    subgraph C["C. Fully custom K1 foundation"]
+        c1["Needs drivers, networking, storage,<br/>filesystem, syscalls, userspace, graphics"]
+        c2["Browsers and apps need a compatibility story<br/>that does not exist yet"]
+    end
+
+    A --> dec{"Decision: open"}
+    B --> dec
+    C --> dec
+
+    classDef open fill:#fff6e5,stroke:#c78a00,color:#111
+    class dec open

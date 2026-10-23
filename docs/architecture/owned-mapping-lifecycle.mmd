@@ -1,0 +1,19 @@
+stateDiagram-v2
+    [*] --> Created: build separate hierarchy
+    Created --> Validating: map request
+    Validating --> Rejected: not canonical, misaligned,<br/>duplicate, or writable + executable
+    Rejected --> Created: nothing changed
+    Validating --> Building: request is valid
+    Building --> Mapped: all levels allocated and linked
+    Building --> RolledBack: allocation fails part way
+    RolledBack --> Created: only owned pages recycled
+    Mapped --> Unmapping: unmap request
+    Unmapping --> Created: owned table pages recycled safely
+    Mapped --> NotYetActive: loading CR3 with this hierarchy
+    NotYetActive --> [*]: planned, not done
+    note right of NotYetActive
+        Hierarchy stays inactive.
+        No CPU access through it
+        and no hardware NX fault
+        has been demonstrated yet.
+    end note

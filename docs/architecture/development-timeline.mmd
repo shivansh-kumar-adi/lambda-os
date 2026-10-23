@@ -1,0 +1,12 @@
+flowchart LR
+    s0g["0G<br/>First bootable kernel"] --> s0h["0H<br/>CPU exceptions"]
+    s0h --> s0i["0I<br/>GDT, TSS, double-fault IST"]
+    s0i --> s0j["0J<br/>Physical allocator"]
+    s0j --> s0k["0K<br/>Page-table inspection"]
+    s0k --> s0l["0L<br/>Owned page-table mapper"]
+    s0l -.-> next["Next: safe activation"]
+
+    classDef rep fill:#eef4ff,stroke:#3b6fd4,color:#111
+    classDef plan fill:#fafafa,stroke:#888,stroke-dasharray:5 4,color:#444
+    class s0g,s0h,s0i,s0j,s0k,s0l rep
+    class next plan
